@@ -32,3 +32,15 @@ def listar_livros():
     for livro in livros:
         print(f"ID: {livro[0]} | Título: {livro[1]} | Autor: {livro[2]} | Ano: {livro[3]} | Disponível: {livro[4]}")
     print("------------------------\n")
+
+def atualizar_disponibilidade(id_livro):
+    cursor.execute("SELECT disponivel FROM livros WHERE id = ?", (id_livro,))
+    resultado = cursor.fetchone()
+
+    if resultado:
+        nova_disponibilidade = "Não" if resultado[0] == "Sim" else "Sim"
+        cursor.execute("UPDATE livros SET disponivel = ? WHERE id = ?", (nova_disponibilidade, id_livro))
+        conn.commit()
+        print(f"Disponibilidade atualizada para '{nova_disponibilidade}'!")
+    else:
+        print("Livro não encontrado.")
