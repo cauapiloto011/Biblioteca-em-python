@@ -44,3 +44,8 @@ def atualizar_disponibilidade(id_livro):
         print(f"Disponibilidade atualizada para '{nova_disponibilidade}'!")
     else:
         print("Livro não encontrado.")
+
+def remover_livro(id_livro):
+    cursor.execute("DELETE FROM livros WHERE id = ?", (id_livro,))
+    conn.commit()
+    print("Livro removido com sucesso!")
