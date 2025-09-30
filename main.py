@@ -24,3 +24,11 @@ def cadastrar_livro(titulo, autor, ano):
     """, (titulo, autor, ano))
     conn.commit()
     print("Livro cadastrado com sucesso!")
+
+def listar_livros():
+    cursor.execute("SELECT * FROM livros")
+    livros = cursor.fetchall()
+    print("\n--- Lista de Livros ---")
+    for livro in livros:
+        print(f"ID: {livro[0]} | Título: {livro[1]} | Autor: {livro[2]} | Ano: {livro[3]} | Disponível: {livro[4]}")
+    print("------------------------\n")
