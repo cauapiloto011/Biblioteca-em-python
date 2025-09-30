@@ -1,23 +1,26 @@
-#Deletando dados do banco
-def deletar_aluno():
-    try:
-        conexao = sqlite3.connect("escola.db")
-        cursor = conexao.cursor()
-       
-        id_aluno = int(input("Digite o id do aluno que deseja deletar: "))
-        cursor.execute("DELETE FROM alunos WHERE id = ?", (id_aluno,))
-        conexao.commit()
-       
-        #Verificar se o aluno foi realmente deletado
-        if cursor.rowcount > 0:
-            print("Aluno removido com sucesso!")
-        else:
-            print("Nenhum aluno cadastrado com o ID fornecido")
-    except Exception as erro:
-        print(f"Erro ao tentar excluir o aluno {erro}")
-    finally:
-        #Sempre fecha a conexão, com sucesso ou erro
-        if conexao:
-            conexao.close()
+import sqlite3
 
-deletar_aluno()
+# Conexão com o banco
+conn = sqlite3.connect("biblioteca.db")
+cursor = conn.cursor()
+
+# Criação da tabela livros
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS livros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    autor TEXT NOT NULL,
+    ano INTEGER,
+    disponivel TEXT CHECK(disponivel IN ('Sim', 'Não')) DEFAULT 'Sim'
+)
+""")
+
+conn.commit()
+
+def cadastrar_livro(titulo, autor, ano):
+    cursor.execute("""
+        INSERT INTO livros (titulo, autor, ano, disponivel)
+        VALUES (?, ?, ?, 'Sim')
+    """, (titulo, autor, ano))
+    conn.commit()
+    print("Livro cadastrado com sucesso!")
